@@ -1,49 +1,56 @@
 package pro.sky.Homework24Apr;
 
 import org.springframework.stereotype.Service;
-import pro.sky.Homework24Apr.exeption.EmployeeAlreadyAddedException;
-import pro.sky.Homework24Apr.exeption.EmployeeNotFoundException;
-import pro.sky.Homework24Apr.exeption.EmployeeStorageIsFullException;
+import pro.sky.Homework01May.exeption.EmployeeAlreadyAddedException;
+import pro.sky.Homework01May.exeption.EmployeeNotFoundException;
+import pro.sky.Homework01May.exeption.EmployeeStorageIsFullException;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class EmployeeService {
 
     public static final int MAX_SIZE = 100;
 
-    private final List<Employee> employees = new ArrayList<>(MAX_SIZE);
+    private final Map<String, Employee> employees = new HashMap<>(MAX_SIZE);
 
     public Employee add(String firstName, String lastName) {
         if (employees.size() > MAX_SIZE) {
             throw new EmployeeStorageIsFullException();
         }
-        var employee = new Employee(firstName, lastName);
-        if (employees.contains(employee)) {
+        var key = (firstName + "_" + lastName).toLowerCase();
+
+        if (employees.containsKey(key)) {
             throw new  EmployeeAlreadyAddedException();
         }
-        employees.add(employee);
+        var employee = new Employee(firstName, lastName, department, salary);
+        employees.put(key, employee);
         return employee;
     }
 
     public Employee delete(String firstName, String lastName) {
-        var employee = new Employee(firstName, lastName);
-        if (!employees.remove(employee)) {
+        var key = (firstName + "_" + lastName).toLowerCase();
+        var removed = employees.remove(key);
+        if (removed == null) {
+            throw new EmployeeNotFoundException();
+        }
+        return removed;
+    }
+
+    public Employee find(String firstName, String lastName) {
+        var key = (firstName + "_" + lastName).toLowerCase();
+        var employee = employees.get(key);
+
+        if (employee == null){
             throw new EmployeeNotFoundException();
         }
         return employee;
     }
 
-    public Employee find(String firstName, String lastName) {
-        var employee = new Employee(firstName, lastName);
-        if (employees.contains(employee)){
-            return employee;
-        }
-        throw new EmployeeNotFoundException();
+    public Collection<Employee> getEmployees() {
+        return employees.values();
     }
 
-    public List<Employee> getEmployees() {
-        return employees;
-    }
 }
