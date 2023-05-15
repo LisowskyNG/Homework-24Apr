@@ -1,9 +1,9 @@
 package pro.sky.Homework24Apr;
 
 import org.springframework.stereotype.Service;
-import pro.sky.Homework01May.exeption.EmployeeAlreadyAddedException;
-import pro.sky.Homework01May.exeption.EmployeeNotFoundException;
-import pro.sky.Homework01May.exeption.EmployeeStorageIsFullException;
+import pro.sky.Homework24Apr.exeption.EmployeeAlreadyAddedException;
+import pro.sky.Homework24Apr.exeption.EmployeeNotFoundException;
+import pro.sky.Homework24Apr.exeption.EmployeeStorageIsFullException;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -25,7 +25,7 @@ public class EmployeeService {
         if (employees.containsKey(key)) {
             throw new  EmployeeAlreadyAddedException();
         }
-        var employee = new Employee(firstName, lastName, department, salary);
+        var employee = new Employee(firstName, lastName, 0, 0);
         employees.put(key, employee);
         return employee;
     }
