@@ -30,10 +30,10 @@ public class EmployeeController {
     public Employee remove(@RequestParam String firstName, @RequestParam String lastName) {
         return service.delete(firstName, lastName);
     }
-//    @GetMapping("/print")
-//    public Collection<Employee> print() {
-//        return service.getEmployees();
-//    }
+    @GetMapping("/print")
+    public Collection<Employee> print() {
+        return service.getEmployees();
+    }
 
 
 }
